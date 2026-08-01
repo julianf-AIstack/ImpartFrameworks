@@ -735,7 +735,7 @@ function finish(){
     if(prev && prev.scores && prev.scores[k]!==undefined){
       const was = num(prev.scores[k]);
       const diff = s.pct - was;
-      delta = `<div class="delta">Last run (${esc(prev.date)}): ${was}% → ${diff>0?'+':''}${diff} pts</div>`;
+      delta = `<div class="delta">Last run (${esc(whenLabel(prev.date))}): ${was}% → ${diff>0?'+':''}${diff} pts</div>`;
     }
     return `<div class="grow" style="--d:var(${d.var})">
       <div class="top"><span class="nm">${d.name}</span><span class="band ${b[1]}">${b[0]}</span></div>
@@ -791,7 +791,7 @@ function currentRecord(){
   const order = ['C','M','T','R'].sort((a,b)=> sc[a].pct - sc[b].pct || sc[a].got - sc[b].got);
   return {
     run_id: runId,
-    date: new Date().toISOString().slice(0,10),
+    date: todayLocal(),
     app_version: APP_VERSION,
     mode: MODES[tier].n, deep, tier, questions: list.length,
     scores: {C:sc.C.pct, M:sc.M.pct, T:sc.T.pct, R:sc.R.pct},
@@ -819,15 +819,40 @@ function save(){
 
 const num = v => { const n = Number(v); return Number.isFinite(n) ? Math.round(n) : 0; };
 
+/* Local calendar date, NOT toISOString().slice(0,10) — that returns the UTC day,
+   so anyone east or west of UTC gets the wrong date for part of every evening.
+   At UTC-5, a run at 8pm on the 1st was being stamped the 2nd. */
+function todayLocal(){
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+/* Elapsed time is the useful signal here, not the calendar stamp — several runs
+   in one afternoon all read "today", which is honest, and the entry number is
+   what tells them apart. */
+function whenLabel(iso){
+  if(!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return '—';
+  const [y,m,d] = iso.split('-').map(Number);
+  const then = new Date(y, m-1, d), now = new Date();
+  const days = Math.round((new Date(now.getFullYear(),now.getMonth(),now.getDate()) - then) / 86400000);
+  if(days <= 0) return 'today';
+  if(days === 1) return 'yesterday';
+  if(days < 7)   return days+' days ago';
+  if(days < 365) return then.toLocaleDateString(undefined,{day:'numeric',month:'short'});
+  return then.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
+}
+
 function renderHistory(){
   // Drop malformed records rather than trusting storage. Guards two real failures:
   // a corrupt `low` used to crash on DOM[r.low].name, and date/mode went into
   // innerHTML unescaped (self-XSS if anything could write to localStorage).
   const runs = history().filter(r => r && r.scores && DOM[r.low]);
   if(runs.length<2){ $('#hist').innerHTML=''; return; }
+  // Number oldest-first so #1 stays #1, then show newest at the top.
+  const rows = runs.map((r,i)=>({r, n:i+1})).reverse();
   $('#hist').innerHTML = `<b>Your history</b> — re-run monthly; the delta is the data.
-   <table><tr><th>Date</th><th>Mode</th><th>Char</th><th>Comm</th><th>Task</th><th>Refl</th><th>Focus</th></tr>
-   ${runs.slice().reverse().map(r=>`<tr><td>${esc(r.date)}</td><td>${esc(r.mode)}</td><td>${num(r.scores.C)}%</td><td>${num(r.scores.M)}%</td><td>${num(r.scores.T)}%</td><td>${num(r.scores.R)}%</td><td>${esc(DOM[r.low].name)}</td></tr>`).join('')}
+   <table><tr><th>#</th><th>When</th><th>Length</th><th>Char</th><th>Comm</th><th>Task</th><th>Refl</th><th>Focus</th></tr>
+   ${rows.map(({r,n})=>`<tr><td>${n}</td><td>${esc(whenLabel(r.date))}</td><td>${esc(r.mode)}</td><td>${num(r.scores.C)}%</td><td>${num(r.scores.M)}%</td><td>${num(r.scores.T)}%</td><td>${num(r.scores.R)}%</td><td>${esc(DOM[r.low].name)}</td></tr>`).join('')}
    </table>`;
 }
 
