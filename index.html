@@ -4,6 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Belief Systems Audit — Impart</title>
+
+<!-- Locked down by default. `default-src 'none'` means this page cannot make a
+     network request of any kind — no fetch, no XHR, no beacon, no remote font or
+     image. Even if a bug let hostile markup in, it would have nowhere to send
+     anything. That is the technical backing for the privacy claim, not just a
+     promise. If opt-in score submission is ever added, this must gain an explicit
+     `connect-src` for that one endpoint and nothing else. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+
+<meta name="description" content="A four-minute diagnostic that finds which of four things — Character, Community, Task, Reflection — is stopping a belief from holding. Runs entirely in your browser; nothing is uploaded.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FAF7F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131211" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Belief Systems Audit — Impart">
+<meta property="og:description" content="You know what you should be doing. You're not doing it. That gap is not a discipline problem — it's a belief that never finished forming.">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23FAF7F2'/%3E%3Crect x='5' y='5' width='10' height='10' rx='2.5' fill='%23B4541E'/%3E%3Crect x='17' y='5' width='10' height='10' rx='2.5' fill='%232F6B5F'/%3E%3Crect x='5' y='17' width='10' height='10' rx='2.5' fill='%233B5BA5'/%3E%3Crect x='17' y='17' width='10' height='10' rx='2.5' fill='%237A4E8C' opacity='.35'/%3E%3C/svg%3E">
 <style>
 :root{
   --paper:#FAF7F2; --ink:#14110F; --muted:#6B625A; --line:#E2DBD1; --card:#FFFFFF;
@@ -229,7 +250,7 @@ details.notes .item .aa{font-size:14.5px;white-space:pre-wrap;color:var(--muted)
     <p><b>4.</b> This is a mechanism, not a moral. Used on other people without their interest at heart, it's manipulation.</p>
   </div>
 
-  <p class="foot">Everything you type stays in this browser. Nothing is uploaded. Clearing your browser data clears your history. <a href="./privacy.html" style="color:inherit">Privacy policy →</a></p>
+  <p class="foot">Everything you type stays in this browser. Nothing is uploaded. Clearing your browser data clears your history. <a href="./privacy.html" style="color:inherit">How to verify that &rarr;</a></p>
 </section>
 
 <!-- ============ QUESTIONS ============ -->
@@ -712,8 +733,9 @@ function finish(){
     const s = sc[k], b = band(s.pct), d = DOM[k];
     let delta = '';
     if(prev && prev.scores && prev.scores[k]!==undefined){
-      const diff = s.pct - prev.scores[k];
-      delta = `<div class="delta">Last run (${prev.date}): ${prev.scores[k]}% → ${diff>0?'+':''}${diff} pts</div>`;
+      const was = num(prev.scores[k]);
+      const diff = s.pct - was;
+      delta = `<div class="delta">Last run (${esc(prev.date)}): ${was}% → ${diff>0?'+':''}${diff} pts</div>`;
     }
     return `<div class="grow" style="--d:var(${d.var})">
       <div class="top"><span class="nm">${d.name}</span><span class="band ${b[1]}">${b[0]}</span></div>
@@ -795,12 +817,17 @@ function save(){
   store.set(KEY, runs.slice(-24));
 }
 
+const num = v => { const n = Number(v); return Number.isFinite(n) ? Math.round(n) : 0; };
+
 function renderHistory(){
-  const runs = history();
+  // Drop malformed records rather than trusting storage. Guards two real failures:
+  // a corrupt `low` used to crash on DOM[r.low].name, and date/mode went into
+  // innerHTML unescaped (self-XSS if anything could write to localStorage).
+  const runs = history().filter(r => r && r.scores && DOM[r.low]);
   if(runs.length<2){ $('#hist').innerHTML=''; return; }
   $('#hist').innerHTML = `<b>Your history</b> — re-run monthly; the delta is the data.
    <table><tr><th>Date</th><th>Mode</th><th>Char</th><th>Comm</th><th>Task</th><th>Refl</th><th>Focus</th></tr>
-   ${runs.slice().reverse().map(r=>`<tr><td>${r.date}</td><td>${r.mode}</td><td>${r.scores.C}%</td><td>${r.scores.M}%</td><td>${r.scores.T}%</td><td>${r.scores.R}%</td><td>${DOM[r.low].name}</td></tr>`).join('')}
+   ${runs.slice().reverse().map(r=>`<tr><td>${esc(r.date)}</td><td>${esc(r.mode)}</td><td>${num(r.scores.C)}%</td><td>${num(r.scores.M)}%</td><td>${num(r.scores.T)}%</td><td>${num(r.scores.R)}%</td><td>${esc(DOM[r.low].name)}</td></tr>`).join('')}
    </table>`;
 }
 
