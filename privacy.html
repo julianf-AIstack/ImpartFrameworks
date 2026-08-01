@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — The Belief Systems Audit — Impart</title>
+<style>
+:root{
+  --paper:#FAF7F2; --ink:#14110F; --muted:#6B625A; --line:#E2DBD1; --card:#FFFFFF;
+  --accent:#C2521C; --accent-soft:#F6E7DE;
+  --shadow:0 1px 2px rgba(20,17,15,.05), 0 8px 24px -12px rgba(20,17,15,.18);
+  --serif:ui-serif,Georgia,"Iowan Old Style","Times New Roman",serif;
+  --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#131211; --ink:#F2EEE8; --muted:#9A918A; --line:#2C2926; --card:#1B1917;
+    --accent:#E8873F; --accent-soft:#2A211B;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:32px 20px 96px}
+h1,h2{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;line-height:1.25;margin:0}
+h1{font-size:clamp(28px,5vw,38px)}
+h2{font-size:20px;margin:38px 0 12px}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+.lede{color:var(--muted);font-size:15px;margin:10px 0 0}
+p{margin:0 0 14px}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+.short{padding:18px 20px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;margin:22px 0}
+.short p:last-child{margin:0}
+ul{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:14.5px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+td code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;background:var(--accent-soft);padding:1px 5px;border-radius:4px}
+.verify{padding:14px 16px;background:var(--accent-soft);border-radius:9px;font-size:14.5px;margin-top:14px}
+.back{display:inline-block;margin-top:10px;font-size:14px;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--ink)}
+.foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Impart · Framework 04</div>
+  <h1>The Belief Systems Audit — Privacy</h1>
+  <p class="lede">Consent version: <strong>2026-08-01</strong></p>
+
+  <div class="short">
+    <p>The audit runs entirely in your browser. Your written answers never leave your device —
+    there is no code path that transmits them.</p>
+    <p>If you choose to, you can send <strong>four percentages</strong> to help build the
+    research base. Nothing else. That choice is opt-in, it happens after you've seen your result,
+    and you can skip it and keep the full result.</p>
+  </div>
+
+  <h2>What the audit stores on your device</h2>
+  <p>Everything you do is saved in your browser's local storage so you can close the tab and come
+  back:</p>
+  <ul>
+    <li>Your answers to every question, including all written responses and Deep-mode reflections</li>
+    <li>Your progress in an unfinished run</li>
+    <li>Your completed run history — up to the last 24 runs, so you can see change over time</li>
+  </ul>
+  <p>This never goes anywhere. It is on your machine, in your browser, and clearing your browser
+  data deletes it permanently. We cannot recover it for you, because we never had it.</p>
+
+  <h2>What gets sent — only if you tick the box</h2>
+  <p>If you opt in on the results screen, exactly these fields are transmitted:</p>
+  <table>
+    <tr><th>Field</th><th>Example</th><th>Why</th></tr>
+    <tr><td>Four domain percentages</td><td>Character 55, Community 33, Task 77, Reflection 66</td><td>The research question: which element is most commonly weak</td></tr>
+    <tr><td>Which element scored lowest</td><td><code>Community</code></td><td>The core finding the framework exists to test</td></tr>
+    <tr><td>Which length you took</td><td><code>Core 12</code> (12 questions)</td><td>Comparability — a 4-question result is not a 16-question result</td></tr>
+    <tr><td>Whether Deep mode was on</td><td><code>false</code></td><td>Depth may correlate with honesty</td></tr>
+    <tr><td>Your total score</td><td><code>24 / 36</code></td><td>Consistency check</td></tr>
+    <tr><td>Today's date</td><td><code>2026-08-01</code></td><td>Time-series analysis</td></tr>
+    <tr><td>A random run ID</td><td><code>a7f3e1c2-…</code></td><td>Lets you extend a run without creating a duplicate record</td></tr>
+    <tr><td>Where you arrived from</td><td><code>linkedin</code></td><td>Which channels reach whom</td></tr>
+    <tr><td>Consent version</td><td><code>2026-08-01</code></td><td>Proof of what you were shown</td></tr>
+    <tr><td><strong>Your email — only if you type one</strong></td><td>—</td><td>Optional. Blank by default. Only if you want follow-up.</td></tr>
+  </table>
+  <p>That is the complete list.</p>
+
+  <h2>What is never sent</h2>
+  <ul>
+    <li><strong>Every word you wrote.</strong> All written answers and all Deep-mode reflections.
+    There is no code path from those fields to any server. The submitted payload is built from
+    your scores alone, never from your answers.</li>
+    <li>Your name, unless you put it in the optional email field</li>
+    <li>Your IP address, browser, device, or location</li>
+    <li>Any cookie or tracking identifier</li>
+    <li>Anything at all, if you don't tick the box</li>
+  </ul>
+  <div class="verify"><strong>You can verify this.</strong> After sending, the page shows you the
+  literal, complete data that was transmitted. Not a summary of it — the actual payload. If it
+  isn't in that box, it wasn't sent.</div>
+
+  <h2>The run ID, and what it deliberately can't do</h2>
+  <p>Each run gets a fresh random ID. It is <strong>not</strong> tied to you or to your browser.</p>
+  <p>This is a deliberate limit. A persistent per-browser identifier would let us link your runs
+  together across months and build a profile. We don't want that capability, so we didn't build
+  it. The consequence is that if you take the audit again next month, we cannot tell it's you —
+  and that's the intended trade.</p>
+  <p>The only exception: if you extend a run (say, 8 questions up to 12) in the same sitting, the
+  ID carries over so your record is updated rather than duplicated.</p>
+
+  <h2>Where it goes and how long it stays</h2>
+  <p>Submitted scores land in a private Google Sheet controlled by Impart. They are not sold,
+  rented, or shared with third parties.</p>
+  <p>Aggregate findings — "X% of people in career transition score lowest on Community" — may be
+  published in Impart's writing, talks, and licensing materials. Aggregates only. With no names,
+  no emails, and no written answers in the dataset, individual results are not identifiable in
+  anything published.</p>
+  <p>If you gave an email, it may be used to send you follow-up about Impart. You can ask to be
+  removed at any time.</p>
+  <p><strong>Retention:</strong> anonymous score records are kept indefinitely as research data.
+  Email addresses are deleted on request.</p>
+
+  <h2>Deleting your data</h2>
+  <p>Email <strong>julianf@fitzfirm.net</strong> and ask. If you have your run ID (shown on the
+  results screen after sending), include it and the exact record can be removed. Without it, any
+  email address you gave can still be removed.</p>
+  <p>To delete what's stored locally, clear your browser data for this site — that is immediate,
+  complete, and doesn't involve us.</p>
+
+  <h2>What this is not</h2>
+  <p>The Belief Systems Audit is a workforce-development diagnostic. <strong>It is not therapy,
+  not a mental health assessment, and not a clinical instrument.</strong> It does not diagnose
+  anything.</p>
+  <p>The framework itself carries this guardrail: trauma and fear install beliefs instantly,
+  bypassing the process this audit measures. Where that applies, healing comes before belief
+  work — and that is a job for a licensed professional, not a questionnaire.</p>
+  <p>If you are in crisis, please contact a qualified professional or an emergency service in
+  your country.</p>
+
+  <h2>Contact</h2>
+  <p><strong>Julian Fitzgerald</strong> — julianf@fitzfirm.net<br>Impart · Framework 04 — Belief Systems</p>
+
+  <a class="back" href="./index.html">&larr; Back to the audit</a>
+
+  <div class="foot">Consent version 2026-08-01 — first version, written before any transmission
+  code shipped.</div>
+
+</div>
+</body>
+</html>

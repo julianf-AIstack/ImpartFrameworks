@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Belief Systems Audit — Impart</title>
+<style>
+:root{
+  --paper:#FAF7F2; --ink:#14110F; --muted:#6B625A; --line:#E2DBD1; --card:#FFFFFF;
+  --accent:#C2521C; --accent-soft:#F6E7DE;
+  --character:#B4541E; --community:#2F6B5F; --task:#3B5BA5; --reflection:#7A4E8C;
+  --strong:#2F6B5F; --developing:#B0761A; --needs:#B33A2B;
+  --shadow:0 1px 2px rgba(20,17,15,.05), 0 8px 24px -12px rgba(20,17,15,.18);
+  --serif:ui-serif,Georgia,"Iowan Old Style","Times New Roman",serif;
+  --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#131211; --ink:#F2EEE8; --muted:#9A918A; --line:#2C2926; --card:#1B1917;
+    --accent:#E8873F; --accent-soft:#2A211B;
+    --character:#E08A52; --community:#5FB3A1; --task:#8AA6E8; --reflection:#BF97D2;
+    --strong:#5FB3A1; --developing:#D9A63F; --needs:#E2705F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--sans);
+  font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:32px 20px 96px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;line-height:1.2;margin:0}
+.eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+.lede{color:var(--muted);font-size:17px;margin:14px 0 0}
+hr{border:0;border-top:1px solid var(--line);margin:32px 0}
+.screen{display:none}
+.screen.on{display:block;animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- start ---------- */
+h1{font-size:clamp(30px,6vw,42px)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;letter-spacing:.04em}
+.chain{margin:26px 0;padding:18px 20px;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.chain .mono{color:var(--muted);line-height:2}
+.chain b{color:var(--ink)}
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:24px 0}
+.pill{padding:13px 14px;border:1px solid var(--line);border-left:3px solid var(--d);border-radius:8px;background:var(--card)}
+.pill b{display:block;font-family:var(--serif);font-size:16px;color:var(--d)}
+.pill span{font-size:13.5px;color:var(--muted)}
+h2.sec{font-size:22px;margin:38px 0 4px}
+.sub{color:var(--muted);font-size:14.5px;margin:4px 0 18px}
+.modes{display:grid;gap:10px}
+.mode{display:flex;gap:14px;align-items:baseline;width:100%;text-align:left;padding:16px 18px;border:1px solid var(--line);background:var(--card);border-radius:10px;cursor:pointer;font:inherit;color:inherit;transition:.15s}
+.mode:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow)}
+.mode .n{font-family:var(--serif);font-size:19px;min-width:96px}
+.mode .d{font-size:14px;color:var(--muted)}
+.mode .t{margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap;padding-left:12px}
+.toggle{display:flex;gap:12px;align-items:flex-start;margin:22px 0 6px;padding:14px 16px;border:1px dashed var(--line);border-radius:10px}
+.toggle input{margin-top:4px;width:17px;height:17px;accent-color:var(--accent)}
+.toggle label{font-size:14.5px}
+.toggle label b{display:block}
+.toggle label span{color:var(--muted)}
+.guard{margin-top:30px;padding:16px 18px;background:var(--accent-soft);border-radius:10px;font-size:14px;color:var(--ink)}
+.guard b{display:block;margin-bottom:6px;font-family:var(--serif);font-size:15px}
+.guard p{margin:0 0 8px}
+.guard p:last-child{margin:0}
+
+/* ---------- question ---------- */
+.bar{position:sticky;top:0;background:var(--paper);padding:14px 0 12px;z-index:5;border-bottom:1px solid var(--line);margin-bottom:26px}
+.bar .row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:9px}
+.track{height:3px;background:var(--line);border-radius:2px;overflow:hidden}
+.fill{height:100%;background:var(--accent);width:0;transition:width .3s ease}
+.tag{display:inline-block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--d);border:1px solid var(--d);padding:3px 8px;border-radius:99px;margin-bottom:14px}
+.q{font-family:var(--serif);font-size:clamp(21px,4.2vw,27px);line-height:1.32}
+.qsub{color:var(--muted);font-size:15px;margin:12px 0 0}
+.opts{display:grid;gap:9px;margin:26px 0 0}
+.opt{display:flex;gap:13px;align-items:flex-start;text-align:left;width:100%;padding:14px 16px;border:1px solid var(--line);background:var(--card);border-radius:10px;cursor:pointer;font:inherit;color:inherit;font-size:15.5px;line-height:1.45;transition:.13s}
+.opt:hover{border-color:var(--d)}
+.opt .dot{flex:none;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);margin-top:4px;transition:.13s}
+.opt.sel{border-color:var(--d);background:color-mix(in srgb,var(--d) 7%,var(--card))}
+.opt.sel .dot{border-color:var(--d);background:var(--d);box-shadow:inset 0 0 0 3px var(--card)}
+.write{margin-top:22px}
+.write label{display:block;font-size:13px;color:var(--muted);margin-bottom:7px}
+.write label b{color:var(--ink);font-weight:600}
+textarea{width:100%;min-height:90px;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;resize:vertical}
+textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
+.deepbox{margin-top:14px;padding:14px 16px;border-left:3px solid var(--d);background:var(--card);border-radius:0 10px 10px 0}
+.deepbox .dh{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--d);font-weight:700;margin-bottom:6px}
+.deepbox p{margin:0 0 10px;font-size:14.5px}
+.nav{display:flex;gap:10px;align-items:center;margin-top:30px;flex-wrap:wrap}
+button.btn{font:inherit;font-size:15px;padding:11px 22px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;font-weight:500}
+button.btn:hover{opacity:.87}
+button.btn[disabled]{opacity:.3;cursor:not-allowed}
+button.ghost{background:transparent;color:var(--muted);border-color:var(--line)}
+button.ghost:hover{color:var(--ink);border-color:var(--ink);opacity:1}
+.spacer{flex:1}
+
+/* ---------- navigation: bar zones, map, exit, resume, extend ---------- */
+.bar .mid{flex:1;text-align:center;padding:0 8px}
+.barbtn{font:inherit;font-size:12px;color:var(--muted);background:transparent;border:1px solid var(--line);
+  border-radius:99px;padding:5px 11px;cursor:pointer;white-space:nowrap}
+.barbtn:hover{color:var(--ink);border-color:var(--ink)}
+.barbtn[aria-expanded="true"]{color:var(--ink);border-color:var(--ink)}
+#progtrack{position:relative}
+#progtrack .fill{position:absolute;top:0;left:0;height:100%}
+#ghostfill{opacity:.32}
+
+.qmap{margin-top:11px;padding-top:11px;border-top:1px solid var(--line)}
+.qmap .grid{display:flex;flex-wrap:wrap;gap:6px}
+.mchip{width:31px;height:31px;border-radius:8px;font:inherit;font-size:12px;font-weight:650;cursor:pointer;
+  border:1.5px solid var(--line);background:var(--card);color:var(--muted);display:grid;place-items:center;transition:.12s;padding:0}
+.mchip.done{border-color:var(--d);color:var(--d);background:color-mix(in srgb,var(--d) 12%,var(--card))}
+.mchip.cur{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.mchip:hover{transform:translateY(-1px)}
+.qmap .lg{font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.5}
+
+.exitstrip{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:11px;padding:11px 13px;
+  border:1px dashed var(--accent);border-radius:9px;background:var(--accent-soft);font-size:13.5px}
+.exitstrip .lb{flex:1;min-width:130px;font-weight:600}
+.exitstrip button{font:inherit;font-size:12.5px;padding:7px 13px;border-radius:7px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.exitstrip button:hover{border-color:var(--ink)}
+.exitstrip button.danger{color:var(--needs);border-color:color-mix(in srgb,var(--needs) 45%,var(--line))}
+
+.resume{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;margin:26px 0 0;
+  border:1px solid var(--accent);border-radius:11px;background:var(--accent-soft)}
+.resume .rt{flex:1;font-size:14.5px}
+.resume .rt b{display:block;font-family:var(--serif);font-size:18px;margin-bottom:3px}
+.resume .ra{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.resume button{font:inherit;font-size:13.5px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--ink);background:var(--ink);color:var(--paper)}
+.resume button.g{background:transparent;color:var(--muted);border-color:var(--line)}
+.resume button.g:hover{color:var(--ink);border-color:var(--ink)}
+
+.extend{margin:24px 0;padding:18px 20px;border:1px solid var(--accent);border-radius:11px;background:var(--accent-soft)}
+.extend b{display:block;font-family:var(--serif);font-size:18px;margin-bottom:5px}
+.extend p{margin:0 0 13px;font-size:14.5px}
+
+/* ---------- results ---------- */
+.gap{display:grid;gap:14px;margin:26px 0 8px}
+.grow{padding:16px 18px;border:1px solid var(--line);border-radius:11px;background:var(--card);border-left:3px solid var(--d)}
+.grow .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.grow .nm{font-family:var(--serif);font-size:19px;color:var(--d)}
+.grow .band{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:4px 10px;border-radius:99px;color:#fff}
+.band.b-strong{background:var(--strong)} .band.b-developing{background:var(--developing)} .band.b-needs{background:var(--needs)}
+.grow .track{margin:12px 0 10px;height:7px;border-radius:4px}
+.grow .fill{background:var(--d)}
+.grow .why{font-size:14.5px;color:var(--muted);margin:0}
+.grow .delta{font-size:12.5px;color:var(--muted);margin-top:8px}
+.focus{margin:28px 0;padding:22px;border-radius:12px;background:var(--card);border:1px solid var(--d);box-shadow:var(--shadow);border-top:4px solid var(--d)}
+.focus .k{font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--d);margin-bottom:9px}
+.focus h3{font-size:24px;margin-bottom:10px}
+.focus p{margin:0 0 14px;font-size:15.5px}
+.focus .move{padding:14px 16px;background:var(--accent-soft);border-radius:9px;font-size:15px}
+.focus .move b{display:block;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+.rule{font-size:14.5px;color:var(--muted);border-left:2px solid var(--line);padding-left:14px;margin:22px 0}
+details.notes{margin-top:12px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:14px 16px}
+details.notes summary{cursor:pointer;font-size:14.5px;font-weight:600}
+details.notes .item{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+details.notes .item .qq{font-family:var(--serif);font-size:16px;margin-bottom:6px}
+details.notes .item .aa{font-size:14.5px;white-space:pre-wrap;color:var(--muted)}
+.acts{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+.hist{margin-top:34px;font-size:13.5px;color:var(--muted)}
+.hist table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+.hist th,.hist td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+.hist th{color:var(--ink);font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:11px 20px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+@media print{
+  .bar,.nav,.acts,.toast,.hist{display:none!important}
+  body{background:#fff;color:#000}
+  .screen{display:block!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ START ============ -->
+<section id="s-start" class="screen on">
+  <div class="eyebrow">Impart · Framework 04</div>
+  <h1>The Belief Systems Audit</h1>
+  <p class="lede">You know what you should be doing. You're not doing it. That gap is not a
+  discipline problem — it's a belief that never finished forming.</p>
+
+  <div class="chain">
+    <div class="mono">
+      new information<br>
+      &nbsp;&nbsp;→ experience of it<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;→ emotion internalized<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ conviction<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ <b>belief</b>
+    </div>
+  </div>
+
+  <p>A belief is not a thought. It's a thought that survived four things at once. This audit finds
+  which of the four is breaking your chain.</p>
+
+  <div class="pillars">
+    <div class="pill" style="--d:var(--character)"><b>Character</b><span>Does this fit who I'm becoming?</span></div>
+    <div class="pill" style="--d:var(--community)"><b>Community</b><span>Who tests this with me?</span></div>
+    <div class="pill" style="--d:var(--task)"><b>Task</b><span>Does my behavior agree?</span></div>
+    <div class="pill" style="--d:var(--reflection)"><b>Reflection</b><span>Do I extract the lesson?</span></div>
+  </div>
+
+  <div id="resume"></div>
+
+  <h2 class="sec">Pick your depth</h2>
+  <p class="sub">Each version is a strict subset of the next. Start short — extend later without repeating a question.</p>
+  <div class="modes">
+    <button class="mode" data-tier="1"><span class="n">60 Second</span><span class="d">One question per element. A scanner.</span><span class="t">4 q</span></button>
+    <button class="mode" data-tier="2"><span class="n">2 Minute</span><span class="d">Two per element. Enough for a real read.</span><span class="t">8 q</span></button>
+    <button class="mode" data-tier="3"><span class="n">Core 12</span><span class="d">The standard diagnostic.</span><span class="t">12 q</span></button>
+    <button class="mode" data-tier="4"><span class="n">Full Audit</span><span class="d">The whole bank. For when you're actually ready.</span><span class="t">16 q</span></button>
+  </div>
+
+  <div class="toggle">
+    <input type="checkbox" id="deep">
+    <label for="deep"><b>Deep mode</b><span>Adds a follow-up prompt and a writing space to every question. The score is the map; the writing is the work.</span></label>
+  </div>
+
+  <div class="guard">
+    <b>Four guardrails, always</b>
+    <p><b>1.</b> Echo chambers build limiting beliefs as fast as empowering ones. You need people who challenge you, not only agree.</p>
+    <p><b>2.</b> Reflection can lie. Ask outright whether you're cherry-picking evidence.</p>
+    <p><b>3.</b> Trauma and fear install beliefs instantly, bypassing all four elements. Healing comes before belief work. This is not therapy.</p>
+    <p><b>4.</b> This is a mechanism, not a moral. Used on other people without their interest at heart, it's manipulation.</p>
+  </div>
+
+  <p class="foot">Everything you type stays in this browser. Nothing is uploaded. Clearing your browser data clears your history. <a href="./privacy.html" style="color:inherit">Privacy policy →</a></p>
+</section>
+
+<!-- ============ QUESTIONS ============ -->
+<section id="s-q" class="screen">
+  <div class="bar">
+    <div class="row">
+      <button class="barbtn" id="exit" aria-expanded="false">&larr; Exit</button>
+      <span class="mid"><span id="counter">Question 1 of 4</span> · <span id="modelabel">60 Second</span></span>
+      <button class="barbtn" id="maptog" aria-expanded="false" aria-controls="qmap">Map</button>
+    </div>
+    <div class="track" id="progtrack">
+      <div class="fill" id="ghostfill"></div>
+      <div class="fill" id="prog"></div>
+    </div>
+    <div class="qmap" id="qmap" hidden></div>
+    <div id="exitmount"></div>
+  </div>
+  <div id="qbody"></div>
+  <div class="nav">
+    <button class="btn ghost" id="back">Back</button>
+    <div class="spacer"></div>
+    <button class="btn ghost" id="earlyfin" hidden></button>
+    <button class="btn" id="next" disabled>Next</button>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section id="s-r" class="screen">
+  <div class="eyebrow">Your Gap Map</div>
+  <h1 id="r-title">Where the chain breaks</h1>
+  <p class="lede" id="r-lede"></p>
+  <div class="gap" id="gapmap"></div>
+  <div class="focus" id="focus"></div>
+  <p class="rule"><b>The Lowest Score Rule.</b> You don't work on your strongest element — you work
+  on your lowest. These four are a conversion chain, not a scorecard to average. Three strong and
+  one weak still produces a belief that doesn't hold, because the weak one is where the conversion
+  breaks.</p>
+  <div id="extend"></div>
+  <div id="notesblock"></div>
+  <div class="acts">
+    <button class="btn" id="copy">Copy as Markdown</button>
+    <button class="btn ghost" id="dl">Download .md</button>
+    <button class="btn ghost" id="print">Print / PDF</button>
+    <button class="btn ghost" id="again">Retake</button>
+  </div>
+  <div class="hist" id="hist"></div>
+  <p class="foot">Impart · Framework 04 — Belief Systems. Re-run this monthly. The delta is the data.</p>
+</section>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DOM = {
+  C:{key:'C',name:'Character',var:'--character',
+     why:{s:"You know who you're becoming and you chose it. Your beliefs are yours, not inherited.",
+          d:"You have a sense of who you're becoming, but parts of it were handed to you and never examined.",
+          n:"You're running beliefs you never chose. Someone else wrote your operating assumptions and you've been executing them."},
+     mean:"You're operating on inherited beliefs you never picked, or chasing something that isn't congruent with who you actually are. Either way the belief has nothing to anchor to.",
+     move:"Write your operating belief down as one sentence: “In my career I am fundamentally ___.” Trace where it came from. Then decide, on paper, whether you keep it."},
+  M:{key:'M',name:'Community',var:'--community',
+     why:{s:"You're surrounded by people who both support and challenge you, including people ahead of you.",
+          d:"You have people, but the mix is thin — mostly peers, mostly agreement.",
+          n:"You're processing this alone or inside an echo chamber. Nothing you believe is getting tested."},
+     mean:"Isolation and echo chambers fail the same way: no belief you hold ever gets pressure-tested, so you can't tell a conviction from a habit.",
+     move:"Two additions, not a network overhaul. One person meaningfully ahead of you. One person who will tell you you're wrong. Name both this week."},
+  T:{key:'T',name:'Task',var:'--task',
+     why:{s:"Your behavior matches your stated beliefs. When it doesn't, you kill the belief on purpose.",
+          d:"You act on it in bursts. Consistency breaks when pressure or novelty shows up.",
+          n:"You believe it in language and contradict it in behavior. That gap is where the belief dies."},
+     mean:"You say it and then don't do it. Every unmatched day is evidence to yourself that you don't actually believe it — and you're the one collecting that evidence.",
+     move:"Pick one stated belief. Run the smallest possible action that only makes sense if it's true. This week, not this quarter. Information is free; implementation is not."},
+  R:{key:'R',name:'Reflection',var:'--reflection',
+     why:{s:"You extract lessons deliberately and update. You can reproduce your own growth on purpose.",
+          d:"You learn from experience, but late and inconsistently — usually only after it hurts.",
+          n:"You're accumulating experience without extracting anything from it. Repetition without learning."},
+     mean:"Experience isn't the teacher — reflected-on experience is. Without it you'll run the same loop for years and call it seniority.",
+     move:"Fifteen minutes, once a week, in writing: what happened, what I expected, what that says. Short and non-negotiable. Add one line: what evidence am I ignoring?"}
+};
+
+const Q = [
+ // tier 1 — the 60 second set
+ {id:1,d:'C',t:1,q:"Complete this honestly: “In my career, I believe I am fundamentally ______.”",
+  sub:"What word came to mind first? Is that belief something you chose, or something you inherited?",
+  o:[["I don't have an answer — I've never actually asked myself this.",0],
+     ["A word came fast, and it's not a kind one. I've never questioned whether it's true.",1],
+     ["I know the word and I can trace where it came from, but I haven't decided if I keep it.",2],
+     ["I chose this belief deliberately, I can defend it, and it holds up under pressure.",3]],
+  deep:"Where did that belief originate — a parent, a mentor, a failure, a success? Write out the origin story in full. Who benefited from you believing it?"},
+
+ {id:2,d:'M',t:1,q:"Who are the three people you talk to most about your career?",
+  sub:"Do they push you toward bigger thinking, or mostly validate what you already believe?",
+  o:[["I don't really talk to anyone about this. I process it alone.",0],
+     ["I have people, but the conversations are venting, not building.",1],
+     ["One of the three genuinely challenges me. The other two agree with me.",2],
+     ["All three push me, and at least one is somewhere I haven't reached yet.",3]],
+  deep:"If those three don't challenge you, who should you be talking to instead? Name the actual person. What's stopping you from reaching out this week?"},
+
+ {id:3,d:'T',t:1,q:"What's something you say you want to do in your career but consistently don't make time for?",
+  sub:"Name it before you pick an answer.",
+  o:[["There are several, and I've stopped noticing that I keep not doing them.",0],
+     ["I can name it immediately. It's been on the list over a year.",1],
+     ["I can name it, and I've made real but inconsistent progress.",2],
+     ["What I say I want and what my calendar says match. If it's not happening, I killed it on purpose.",3]],
+  deep:"If you did make time for it, what would you have to give up? Is that trade — not the time — the real barrier? What does the gap tell you about what you actually believe is possible?"},
+
+ {id:4,d:'R',t:1,q:"When something goes wrong professionally, what's your immediate internal narrative?",
+  sub:"Not the one you'd say out loud. The first one.",
+  o:[["I don't have a narrative. I just move on to the next thing fast.",0],
+     ["Blame first — the circumstances, the other people, the timing.",1],
+     ["I blame myself, hard, and call that accountability.",2],
+     ["I feel it, then I separate what was mine from what wasn't, and I take the lesson.",3]],
+  deep:"Track this for one week. Write down every professional setback and your first internal sentence about it. What pattern shows up? Does it change depending on who was watching?"},
+
+ // tier 2 — adds to reach 2 minutes
+ {id:8,d:'R',t:2,q:"Describe a time you succeeded at something you didn't think you could do.",
+  sub:"Did it change what you believe about your potential — or did you write it off as luck?",
+  o:[["I can't think of one right now.",0],
+     ["I can name it, and I attributed it to luck, timing, or someone else.",1],
+     ["It shifted something, but the shift faded.",2],
+     ["It permanently changed what I think I'm capable of, and I've acted on it since.",3]],
+  deep:"How many more successes like that would it take before you actually believed you were capable? If the number is high or infinite, the problem isn't evidence."},
+
+ {id:5,d:'C',t:2,q:"What is your core belief about what's possible for you in your career?",
+  sub:"Is that belief serving you, or limiting you?",
+  o:[["I've never articulated it. I'd have to guess.",0],
+     ["I can articulate it, and saying it out loud, it's clearly limiting me.",1],
+     ["It's a mixed belief — expansive in some areas, capped in others.",2],
+     ["It's clear, it's ambitious, and my behavior is consistent with it.",3]],
+  deep:"If you could replace that belief, what would you replace it with? What would have to actually happen for the new belief to feel real to you — not just sound good?"},
+
+ {id:7,d:'T',t:2,q:"What's one professional goal you've abandoned?",
+  sub:"Was it wrong for you — or did you stop believing it was possible?",
+  o:[["I've abandoned several and never examined why.",0],
+     ["I told myself it was wrong for me, but honestly I stopped believing I could.",1],
+     ["I dropped it for real reasons, though I still think about it.",2],
+     ["I killed it deliberately, for stated reasons, and I don't carry it.",3]],
+  deep:"Revisit that goal now, holding a different belief about your capability. What changes? Is any part of it still live?"},
+
+ {id:6,d:'M',t:2,q:"Are you more influenced by people who are where you want to be, or people who are where you currently are?",
+  sub:"Be honest about who you actually talk to, not who you follow.",
+  o:[["Almost entirely people at my level or below.",0],
+     ["Mostly peers. I follow people ahead of me but I don't know them.",1],
+     ["I have real access to one or two people ahead of me, though I use it rarely.",2],
+     ["I'm in consistent, live contact with people meaningfully ahead of me.",3]],
+  deep:"What does your answer say about what you believe is actually possible? If you're peer-anchored, what is one concrete step this month toward someone further along?"},
+
+ // tier 3 — adds to reach Core 12
+ {id:11,d:'T',t:3,q:"In the past year, what's one thing you said yes to even though it scared you?",
+  sub:"",
+  o:[["Nothing comes to mind.",0],
+     ["One thing, and I was pushed into it.",1],
+     ["One or two, chosen deliberately.",2],
+     ["Several. Saying yes to the scary version is now how I operate.",3]],
+  deep:"What made you say yes despite the fear — external pressure, internal conviction, or something else? Name the before-belief and the after-belief."},
+
+ {id:12,d:'R',t:3,q:"Think of a time you tried something in your career and it didn't work out.",
+  sub:"What did you actually learn — and how did it change what you believe about yourself?",
+  o:[["It mostly made me more cautious. I'm not sure I learned anything specific.",0],
+     ["I learned something, but only much later, and it confirmed a fear.",1],
+     ["I got a real lesson out of it, though it took time to surface.",2],
+     ["I extracted a specific, usable lesson and changed how I operate because of it.",3]],
+  deep:"Did you extract the lesson in the moment, or only long after? What prevented you from reflecting immediately — pace, ego, pain, or no habit for it?"},
+
+ {id:9,d:'C',t:3,q:"What skill or capability do you not see yourself as having?",
+  sub:"Is that because you lack aptitude — or because you haven't given yourself permission to develop it?",
+  o:[["I've assumed it's fixed. I've never separated aptitude from permission.",0],
+     ["I know it's permission, not aptitude, and I still haven't started.",1],
+     ["I've started developing it, tentatively.",2],
+     ["I've proven a “not me” skill can become a me skill. I've done it at least once.",3]],
+  deep:"If someone you deeply respect told you that you could develop this, would you believe them? Why or why not? That answer is the actual diagnostic."},
+
+ {id:10,d:'M',t:3,q:"Do you have a mentor or advocate in your field who believes in you more than you believe in yourself?",
+  sub:"If not — why haven't you sought one out?",
+  o:[["No, and I've never seriously tried.",0],
+     ["No — I've thought about asking and never did.",1],
+     ["Informally, yes. Nothing structured or consistent.",2],
+     ["Yes, named, and we're in real contact.",3]],
+  deep:"What would it actually cost you — emotionally, practically — to ask someone to mentor you? Name the fear precisely. Is it rejection, or is it being seen needing help?"},
+
+ // tier 4 — the full bank
+ {id:14,d:'M',t:4,q:"Whose permission would you need to pursue your biggest career aspiration?",
+  sub:"Is that permission actually necessary — or is it a belief you're carrying?",
+  o:[["I've never thought about it in those terms.",0],
+     ["Someone specific comes to mind immediately, and I'm still waiting.",1],
+     ["I've realized I don't need it, and I still behave like I do.",2],
+     ["I don't wait for permission. I inform people; I don't ask them.",3]],
+  deep:"What would it feel like to stop waiting? Write the sentence you'd have to say to that person — or to yourself — to end the wait."},
+
+ {id:15,d:'T',t:4,q:"When you learn something that would require you to change how you work, how fast does it show up in your actual behavior?",
+  sub:"",
+  o:[["It usually doesn't. I collect the insight and keep operating the same way.",0],
+     ["Months, if ever. I need a crisis to force it.",1],
+     ["Weeks. I'm inconsistent but I get there.",2],
+     ["Days. I run a small version of it immediately to see if it's real.",3]],
+  deep:"List the last three genuinely useful things you learned. For each, write the specific behavior that changed. If you can't name one, you have a conversion problem, not an information problem."},
+
+ {id:16,d:'R',t:4,q:"Describe a belief you held five years ago about what you were capable of.",
+  sub:"How has it changed, and what caused the shift?",
+  o:[["I don't think it's changed much.",0],
+     ["It changed, and I couldn't tell you what caused it.",1],
+     ["It changed, and I can point roughly to what caused it.",2],
+     ["It changed, I know exactly what caused it, and I can deliberately trigger that again.",3]],
+  deep:"Was the shift gradual or sudden? Did someone challenge you, or did you challenge yourself? Whichever it was — can you reproduce it on purpose? That's the whole game."},
+
+ {id:13,d:'C',t:4,q:"Finish this: “People in my field are ______.”",
+  sub:"Now: do you see yourself as that kind of person?",
+  o:[["I don't feel like I belong in my field. I feel like I'm passing.",0],
+     ["I described them positively and don't see myself in it at all.",1],
+     ["I mostly see myself in it, with an asterisk I can't quite name.",2],
+     ["I claim the identity fully — and I also see where the description needs to change.",3]],
+  deep:"If you don't see yourself that way, what specifically would need to change for you to claim the identity? Is it a credential, a result, a room, or just permission?"}
+];
+
+const MODES = {1:{n:'60 Second',c:4},2:{n:'2 Minute',c:8},3:{n:'Core 12',c:12},4:{n:'Full Audit',c:16}};
+const KEY = 'impart.beliefsystems.v1';
+const DRAFT_KEY = 'impart.beliefsystems.draft.v1';
+const DRAFT_TTL = 30*24*3600*1000;   // 30 days
+const APP_VERSION = 'bs-2.0';
+
+const COUNT_OF_TIER = {1:4, 2:8, 3:12, 4:16};
+const TIER_OF_COUNT = {4:1, 8:2, 12:3, 16:4};
+const listFor = t => Q.filter(q => q.t <= t);
+
+/* The nested-prefix invariant. Q is ordered in tier blocks, so every tier is a
+   contiguous prefix of the full list AND is domain-balanced. That is what makes
+   "finish early at a lower tier" produce a result identical to taking that tier
+   fresh. Early finish and extension both depend on it. Log loudly, never throw —
+   a broken assertion must not take the tool down for a user, but it must never
+   ship silently either. */
+(function assertNestedPrefix(){
+  const full = listFor(4);
+  if(full.length !== 16){ console.error('[bs] question bank is not 16'); return; }
+  for(const t of [1,2,3]){
+    const sub = listFor(t);
+    if(sub.length !== COUNT_OF_TIER[t] || !sub.every((q,i)=>q.id === full[i].id)){
+      console.error('[bs] NESTED PREFIX INVARIANT BROKEN at tier', t,
+        '— early finish and extension are unsafe. Reorder Q so tiers are contiguous blocks.');
+    }
+  }
+})();
+
+const store = {
+  get(k,fb){ try{ const v=localStorage.getItem(k); return v==null?fb:JSON.parse(v); }catch(e){ return fb; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+
+let tier=1, deep=false, list=[], idx=0, ans={}, runId=null, src='';
+
+const $ = s => document.querySelector(s);
+const show = id => document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on', s.id===id));
+const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1900); };
+const esc = s => String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+/* One id per RUN, not per browser. A persistent per-browser id would silently
+   link a person's runs across months — a longitudinal identifier we have not
+   disclosed and do not need. */
+function newRunId(){
+  try{ if(crypto.randomUUID) return crypto.randomUUID(); }catch(e){}
+  try{
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{
+      const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16;
+      return (c==='x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }catch(e){ return 'x'+Date.now().toString(16)+Math.random().toString(16).slice(2,10); }
+}
+function readSrc(){
+  try{
+    const p = new URLSearchParams(location.search);
+    const v = (p.get('src') || p.get('utm_source') || '').trim().toLowerCase();
+    return /^[a-z0-9_-]{1,32}$/.test(v) ? v : '';
+  }catch(e){ return ''; }
+}
+src = readSrc();
+
+/* ---------- draft persistence ---------- */
+let draftTimer = null;
+function saveDraft(){
+  if(!runId) return;
+  store.set(DRAFT_KEY, {v:1, run_id:runId, tier, deep, idx, ans, src, updatedAt:Date.now()});
+}
+function saveDraftSoon(){ clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 400); }
+function clearDraft(){ clearTimeout(draftTimer); store.del(DRAFT_KEY); }
+function loadDraft(){
+  const d = store.get(DRAFT_KEY, null);
+  if(!d || d.v !== 1 || !d.run_id || !COUNT_OF_TIER[d.tier]) return null;
+  if(Date.now() - (d.updatedAt||0) > DRAFT_TTL){ store.del(DRAFT_KEY); return null; }
+  return d;
+}
+function renderResume(){
+  const d = loadDraft();
+  if(!d){ $('#resume').innerHTML=''; return; }
+  const total = COUNT_OF_TIER[d.tier];
+  const done = Object.values(d.ans||{}).filter(a=>a && a.score!==undefined).length;
+  $('#resume').innerHTML = `<div class="resume"><div class="rt">
+    <b>You have an unfinished run</b>
+    ${MODES[d.tier].n}${d.deep?' · Deep':''} — question ${Math.min((d.idx||0)+1,total)} of ${total}, ${done} answered.
+    <div class="ra"><button id="rres">Resume</button><button class="g" id="rdis">Start over</button></div>
+  </div></div>`;
+  $('#rres').onclick = ()=>{
+    tier=d.tier; deep=!!d.deep; ans=d.ans||{}; runId=d.run_id; src=d.src||src;
+    list = listFor(tier);
+    idx = Math.min(d.idx||0, list.length-1);
+    $('#deep').checked = deep;
+    show('s-q'); render(); window.scrollTo(0,0);
+  };
+  $('#rdis').onclick = ()=>{ clearDraft(); renderResume(); };
+}
+
+document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>{
+  tier = +b.dataset.tier;
+  deep = $('#deep').checked;
+  list = listFor(tier);
+  idx = 0; ans = {}; runId = newRunId();
+  closeExit(); saveDraft();
+  show('s-q'); render(); window.scrollTo(0,0);
+}));
+
+function render(){
+  const q = list[idx], D = DOM[q.d];
+  $('#counter').textContent = `Question ${idx+1} of ${list.length}`;
+  $('#modelabel').textContent = MODES[tier].n + (deep?' · Deep':'');
+  const a = ans[q.id] || {};
+  $('#qbody').innerHTML = `
+    <div style="--d:var(${D.var})">
+      <span class="tag">${D.name}</span>
+      <div class="q">${q.q}</div>
+      ${q.sub?`<p class="qsub">${q.sub}</p>`:''}
+      <div class="opts">
+        ${q.o.map((o,i)=>`<button class="opt${a.score===o[1]&&a.pick===i?' sel':''}" data-i="${i}" data-s="${o[1]}">
+          <span class="dot"></span><span>${o[0]}</span></button>`).join('')}
+      </div>
+      ${deep?`<div class="deepbox"><div class="dh">Go deeper</div><p>${q.deep}</p>
+        <textarea id="note" placeholder="Write it out. This is the part that actually changes something.">${esc(a.note||'')}</textarea></div>`
+      :`<div class="write"><label>Optional — <b>name it in your own words</b></label>
+        <textarea id="note" placeholder="One or two sentences.">${esc(a.note||'')}</textarea></div>`}
+    </div>`;
+  $('#qbody').querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
+    $('#qbody').querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
+    b.classList.add('sel');
+    ans[q.id] = Object.assign({}, ans[q.id], {score:+b.dataset.s, pick:+b.dataset.i, label:q.o[+b.dataset.i][0]});
+    saveDraft(); updateNav(); updateProgress(); renderMap();
+  }));
+  $('#note').addEventListener('input', e=>{
+    ans[q.id] = Object.assign({}, ans[q.id], {note:e.target.value});
+    saveDraftSoon();
+  });
+  updateNav(); updateProgress(); renderMap();
+}
+
+function updateProgress(){
+  const answered = list.filter(q=>ans[q.id] && ans[q.id].score!==undefined).length;
+  $('#prog').style.width      = (answered/list.length*100)+'%';   // solid — work done
+  $('#ghostfill').style.width = ((idx+1)/list.length*100)+'%';    // faint — where you are
+}
+
+function updateNav(){
+  const q = list[idx];
+  $('#next').disabled = !(ans[q.id] && ans[q.id].score!==undefined);
+  $('#next').textContent = idx===list.length-1 ? 'See my Gap Map' : 'Next';
+  $('#back').style.visibility = idx===0 ? 'hidden' : 'visible';
+  const t = availableTier(), ef = $('#earlyfin');
+  if(t){ ef.hidden=false; ef.textContent = `Finish now at ${t} →`; ef.dataset.count = t; }
+  else { ef.hidden = true; }
+}
+
+function renderMap(){
+  const m = $('#qmap');
+  if(m.hidden) return;
+  m.innerHTML = `<div class="grid">${list.map((q,i)=>{
+    const a = ans[q.id], done = a && a.score!==undefined;
+    const st = i===idx ? 'cur' : (done ? 'done' : '');
+    return `<button class="mchip ${st}" data-i="${i}" style="--d:var(${DOM[q.d].var})" title="${DOM[q.d].name}"
+      aria-label="Question ${i+1}, ${DOM[q.d].name}, ${done?'answered':'not answered'}">${i+1}</button>`;
+  }).join('')}</div>
+  <div class="lg">Colour = element. The questions are deliberately shuffled across all four, so nobody can sail through one category.</div>`;
+  m.querySelectorAll('.mchip').forEach(c=>c.onclick=()=>{
+    idx = +c.dataset.i; saveDraft(); render(); window.scrollTo(0,0);
+  });
+}
+
+$('#maptog').addEventListener('click',()=>{
+  const m = $('#qmap'), opening = m.hidden;
+  m.hidden = !opening;
+  $('#maptog').setAttribute('aria-expanded', String(opening));
+  if(opening) renderMap();
+});
+
+/* Early finish keys off the answered PREFIX, not the answered count. Someone who
+   jumped around the map and answered 1,2,3,5,6,7,8 has answered 7 but has a valid
+   prefix of 3 — no tier is available to them. Prefix completeness is what
+   guarantees compute() runs over a domain-balanced set. */
+function answeredPrefix(){
+  let n = 0;
+  while(n < list.length && ans[list[n].id] && ans[list[n].id].score !== undefined) n++;
+  return n;
+}
+function availableTier(){
+  const n = answeredPrefix();
+  let best = 0;
+  for(const c of [4,8,12]) if(c <= n && c < list.length) best = c;
+  return best;
+}
+function finishAt(count){
+  const t = TIER_OF_COUNT[count];
+  if(!t) return;
+  // Canonical re-derivation — listFor(), never list.slice(). slice would silently
+  // depend on file order; listFor stays correct even if Q is later reordered.
+  tier = t;
+  list = listFor(t);
+  if(list.some(q => !ans[q.id] || ans[q.id].score === undefined)){
+    console.error('[bs] finishAt called with an incomplete tier'); return;
+  }
+  idx = Math.min(idx, list.length-1);
+  finish();
+}
+
+function closeExit(){
+  const m = $('#exitmount'); if(m) m.innerHTML='';
+  const b = $('#exit'); if(b) b.setAttribute('aria-expanded','false');
+}
+$('#exit').addEventListener('click',()=>{
+  const mount = $('#exitmount');
+  if(mount.innerHTML){ closeExit(); return; }
+  $('#exit').setAttribute('aria-expanded','true');
+  const t = availableTier();
+  mount.innerHTML = `<div class="exitstrip">
+    <span class="lb">Leave this run?</span>
+    <button id="xkeep">Keep my progress</button>
+    ${t?`<button id="xfin">See my ${t}-question result</button>`:''}
+    <button class="danger" id="xdis">Discard</button></div>`;
+  $('#xkeep').onclick = ()=>{ saveDraft(); closeExit(); renderResume(); show('s-start'); window.scrollTo(0,0); };
+  const xf = $('#xfin'); if(xf) xf.onclick = ()=>{ closeExit(); finishAt(t); };
+  $('#xdis').onclick = ()=>{
+    clearDraft(); ans={}; idx=0; runId=null;
+    closeExit(); renderResume(); show('s-start'); window.scrollTo(0,0);
+  };
+});
+
+$('#next').addEventListener('click',()=>{
+  if(idx===list.length-1){ finish(); }
+  else { idx++; saveDraft(); render(); window.scrollTo(0,0); }
+});
+$('#back').addEventListener('click',()=>{ if(idx>0){ idx--; saveDraft(); render(); window.scrollTo(0,0);} });
+$('#earlyfin').addEventListener('click',()=>{ finishAt(+$('#earlyfin').dataset.count); });
+
+function band(pct){ return pct>=75?['Strong','b-strong','s'] : pct>=45?['Developing','b-developing','d'] : ['Needs Work','b-needs','n']; }
+
+function compute(){
+  const out = {};
+  ['C','M','T','R'].forEach(k=>{
+    const qs = list.filter(q=>q.d===k);
+    const got = qs.reduce((s,q)=>s+(ans[q.id]?.score||0),0);
+    const max = qs.length*3;
+    out[k] = {got, max, pct: Math.round(got/max*100), n: qs.length};
+  });
+  return out;
+}
+
+function finish(){
+  closeExit();
+  const sc = compute();
+  const order = ['C','M','T','R'].sort((a,b)=> sc[a].pct - sc[b].pct || sc[a].got - sc[b].got);
+  const low = order[0], D = DOM[low];
+  const total = ['C','M','T','R'].reduce((s,k)=>s+sc[k].got,0);
+  const totalMax = ['C','M','T','R'].reduce((s,k)=>s+sc[k].max,0);
+
+  // Exclude this run — otherwise extending 8→12 compares the run against itself.
+  const prev = history().filter(r=>r.run_id !== runId).slice(-1)[0];
+
+  const allStrong = sc[low].pct >= 75;
+  $('#r-title').textContent = allStrong ? 'Your weakest link — and it holds' : 'Where the chain breaks';
+  $('#r-lede').textContent = `${MODES[tier].n}${deep?' · Deep':''} — ${total} of ${totalMax} overall. `
+    + (allStrong
+        ? `All four elements are converting. ${D.name} is your thinnest, so that's where pressure will find you first.`
+        : `Your chain is breaking at ${D.name}.`);
+
+  $('#gapmap').innerHTML = ['C','M','T','R'].map(k=>{
+    const s = sc[k], b = band(s.pct), d = DOM[k];
+    let delta = '';
+    if(prev && prev.scores && prev.scores[k]!==undefined){
+      const diff = s.pct - prev.scores[k];
+      delta = `<div class="delta">Last run (${prev.date}): ${prev.scores[k]}% → ${diff>0?'+':''}${diff} pts</div>`;
+    }
+    return `<div class="grow" style="--d:var(${d.var})">
+      <div class="top"><span class="nm">${d.name}</span><span class="band ${b[1]}">${b[0]}</span></div>
+      <div class="track"><div class="fill" style="width:${s.pct}%"></div></div>
+      <p class="why">${d.why[b[2]]} <span style="opacity:.7">(${s.got}/${s.max})</span></p>
+      ${delta}</div>`;
+  }).join('');
+
+  $('#focus').style.setProperty('--d',`var(${D.var})`);
+  $('#focus').innerHTML = `<div class="k">${allStrong?'Protect this first':'Start here'}</div>
+    <h3>${D.name}</h3>
+    <p>${allStrong ? 'Nothing here is broken. This is simply your thinnest element, which makes it the one that fails first when conditions get hard — so it is where maintenance goes.' : D.mean}</p>
+    <div class="move"><b>Your first move</b>${D.move}</div>`;
+
+  const written = list.filter(q=>ans[q.id]?.note?.trim());
+  $('#notesblock').innerHTML = written.length ? `<details class="notes"><summary>What you wrote (${written.length})</summary>
+    ${written.map(q=>`<div class="item"><div class="qq">${q.q}</div><div class="aa">${esc(ans[q.id].note)}</div></div>`).join('')}
+    </details>` : '';
+
+  renderExtend();
+  save();
+  renderHistory();
+  show('s-r'); window.scrollTo(0,0);
+}
+
+/* The framework doc promises this twice — "start short, extend later without
+   repeating a question" — and until now the tool didn't deliver it. */
+function renderExtend(){
+  const el = $('#extend');
+  if(tier >= 4){ el.innerHTML=''; return; }
+  const next = tier+1, add = COUNT_OF_TIER[next] - COUNT_OF_TIER[tier];
+  el.innerHTML = `<div class="extend"><b>Go further</b>
+    <p>You answered ${COUNT_OF_TIER[tier]}. The next ${add} questions add depth without repeating
+    anything you've already answered.</p>
+    <button class="btn" id="doext">Extend to ${MODES[next].n} &rarr;</button></div>`;
+  $('#doext').onclick = ()=>extendTo(next);
+}
+function extendTo(t){
+  tier = t;
+  list = listFor(t);
+  idx = Math.min(answeredPrefix(), list.length-1);  // first genuinely new question
+  saveDraft();
+  show('s-q'); render(); window.scrollTo(0,0);
+}
+
+const history = () => store.get(KEY, []);
+
+/* Built from live state, never from storage — so the export still works when
+   localStorage is unavailable (Safari private mode, quota full), where the old
+   version threw on undefined. */
+function currentRecord(){
+  const sc = compute();
+  const order = ['C','M','T','R'].sort((a,b)=> sc[a].pct - sc[b].pct || sc[a].got - sc[b].got);
+  return {
+    run_id: runId,
+    date: new Date().toISOString().slice(0,10),
+    app_version: APP_VERSION,
+    mode: MODES[tier].n, deep, tier, questions: list.length,
+    scores: {C:sc.C.pct, M:sc.M.pct, T:sc.T.pct, R:sc.R.pct},
+    total: ['C','M','T','R'].reduce((s,k)=>s+sc[k].got,0),
+    totalMax: ['C','M','T','R'].reduce((s,k)=>s+sc[k].max,0),
+    low: order[0], src,
+    answers: list.map(q=>({
+      id:q.id, d:q.d, q:q.q,
+      pick:  (ans[q.id] && ans[q.id].label) || '',
+      score: (ans[q.id] && ans[q.id].score) || 0,
+      note: ((ans[q.id] && ans[q.id].note) || '').trim()
+    }))
+  };
+}
+
+/* Upsert by run_id. Without this, taking 4 then extending to 8 then 12 leaves
+   three same-day rows in the history table. */
+function save(){
+  const rec = currentRecord();
+  const runs = history();
+  const i = runs.findIndex(r => r.run_id && r.run_id === rec.run_id);
+  if(i >= 0) runs[i] = rec; else runs.push(rec);
+  store.set(KEY, runs.slice(-24));
+}
+
+function renderHistory(){
+  const runs = history();
+  if(runs.length<2){ $('#hist').innerHTML=''; return; }
+  $('#hist').innerHTML = `<b>Your history</b> — re-run monthly; the delta is the data.
+   <table><tr><th>Date</th><th>Mode</th><th>Char</th><th>Comm</th><th>Task</th><th>Refl</th><th>Focus</th></tr>
+   ${runs.slice().reverse().map(r=>`<tr><td>${r.date}</td><td>${r.mode}</td><td>${r.scores.C}%</td><td>${r.scores.M}%</td><td>${r.scores.T}%</td><td>${r.scores.R}%</td><td>${DOM[r.low].name}</td></tr>`).join('')}
+   </table>`;
+}
+
+function markdown(){ return renderMarkdown(currentRecord()); }
+
+function renderMarkdown(r){
+  const b = p => band(p)[0];
+  let m = `# Belief Systems Audit — ${r.date}\n\n`;
+  m += `_Impart Framework 04 · ${r.mode}${r.deep?' · Deep mode':''} · ${r.total}/${r.totalMax}_\n\n## Gap Map\n\n`;
+  m += `| Element | Score | Band |\n|---|---|---|\n`;
+  ['C','M','T','R'].forEach(k=>{ m += `| ${DOM[k].name} | ${r.scores[k]}% | ${b(r.scores[k])} |\n`; });
+  m += `\n**Start here: ${DOM[r.low].name}.** ${DOM[r.low].mean}\n\n`;
+  m += `**First move.** ${DOM[r.low].move}\n\n## Responses\n\n`;
+  r.answers.forEach(a=>{
+    m += `### [${DOM[a.d].name}] ${a.q}\n**Selected (${a.score}/3):** ${a.pick}\n`;
+    if(a.note) m += `\n${a.note}\n`;
+    m += `\n`;
+  });
+  return m;
+}
+
+$('#copy').addEventListener('click',()=>{
+  navigator.clipboard.writeText(markdown()).then(()=>toast('Markdown copied — paste it into your project file'),()=>toast('Copy failed — use Download instead'));
+});
+$('#dl').addEventListener('click',()=>{
+  const r = currentRecord();
+  const blob = new Blob([renderMarkdown(r)],{type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = `belief-audit-${r.date}.md`; a.click();
+  URL.revokeObjectURL(a.href);
+});
+$('#print').addEventListener('click',()=>window.print());
+$('#again').addEventListener('click',()=>{
+  clearDraft();
+  ans={}; idx=0; runId=null; tier=1; list=[];
+  $('#extend').innerHTML='';
+  renderResume();
+  show('s-start'); window.scrollTo(0,0);
+});
+
+/* ---------- init ---------- */
+renderResume();
+</script>
+</body>
+</html>
